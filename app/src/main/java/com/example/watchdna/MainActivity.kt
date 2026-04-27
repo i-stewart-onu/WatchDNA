@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @PreviewScreenSizes
 @Composable
 fun WatchDNAApp() {
@@ -52,7 +53,20 @@ fun WatchDNAApp() {
             }
         }
     ) {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text("WatchDNA")
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = androidx.compose.ui.graphics.Color(0xFFBEA877),
+                        titleContentColor = androidx.compose.ui.graphics.Color.White
+                    )
+                )
+            }
+        ) { innerPadding ->
             ScreenContent(
                 destination = currentDestination,
                 modifier = Modifier.padding(innerPadding)
