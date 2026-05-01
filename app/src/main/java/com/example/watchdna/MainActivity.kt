@@ -133,6 +133,7 @@ fun WatchDNAApp() {
                 "Hong Kong Watch & Clock Design Competition" -> HongKongDesignCompetitionScreen(Modifier.padding(padding))
                 "Watchmaking 101" -> Watchmaking101Screen(Modifier.padding(padding))
                 "World of Watches" -> WorldOfWatchesScreen(Modifier.padding(padding))
+                "Our Stories" -> OurStoriesScreen(Modifier.padding(padding))
                 else -> DetailScreen(currentDetail!!, Modifier.padding(padding))
             }
         } else {
