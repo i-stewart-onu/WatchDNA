@@ -1,8 +1,11 @@
 package com.example.watchdna
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -10,25 +13,58 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WatchBrandsScreen(modifier: Modifier = Modifier) {
+fun WatchBrandsScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
     var selectedTab by remember { mutableStateOf(0) }
+    var searchQuery by remember { mutableStateOf("") }
     val tabs = listOf("Groups", "Countries", "Connected", "Alphabetical")
 
     Column(modifier = modifier) {
-        ScrollableTabRow(selectedTabIndex = selectedTab) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    selected = selectedTab == index,
-                    onClick = { selectedTab = index },
-                    text = { Text(title) }
-                )
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            placeholder = { Text("Search brands…") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+
+        if (searchQuery.isBlank()) {
+            ScrollableTabRow(selectedTabIndex = selectedTab) {
+                tabs.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTab == index,
+                        onClick = { selectedTab = index },
+                        text = { Text(title) }
+                    )
+                }
             }
-        }
-        when (selectedTab) {
-            0 -> GroupsTab()
-            1 -> CountriesTab()
-            2 -> ConnectedTab()
-            3 -> AlphabeticalTab()
+            when (selectedTab) {
+                0 -> GroupsTab(onNavigate)
+                1 -> CountriesTab(onNavigate)
+                2 -> ConnectedTab(onNavigate)
+                3 -> AlphabeticalTab(onNavigate)
+            }
+        } else {
+            val results = allBrands.filter {
+                it.contains(searchQuery.trim(), ignoreCase = true)
+            }
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                if (results.isEmpty()) {
+                    item {
+                        Text(
+                            text = "No brands found",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                } else {
+                    items(results) { name -> BrandItem(name) { onNavigate(name) } }
+                }
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+            }
         }
     }
 }
@@ -47,191 +83,190 @@ fun BrandSectionHeader(title: String) {
 }
 
 @Composable
-fun BrandItem(name: String) {
+fun BrandItem(name: String, onClick: () -> Unit = {}) {
     Text(
         text = name,
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 10.dp)
     )
     HorizontalDivider()
 }
 
 @Composable
-fun GroupsTab() {
+fun GroupsTab(onNavigate: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item { BrandSectionHeader("Brandmark Group") }
-        items(listOf("Allure", "Oasis")) { BrandItem(it) }
+        items(listOf("Allure", "Oasis")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Casio Computer Co. Ltd") }
-        items(listOf("Casio", "G-Shock", "Oceanus")) { BrandItem(it) }
+        items(listOf("Casio", "G-Shock", "Oceanus")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Citizen Watch Co. Ltd") }
-        items(listOf("Alpina", "Arnold & Son", "Ateliers deMonaco", "Bulova", "Campanola", "Citizen", "Frederique Constant", "La Joux-Perret")) { BrandItem(it) }
+        items(listOf("Alpina", "Arnold & Son", "Ateliers deMonaco", "Bulova", "Campanola", "Citizen", "Frederique Constant", "La Joux-Perret")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Compagnie Financière Richemont") }
-        items(listOf("A. Lange & Söhne", "Baume & Mercier", "Cartier", "IWC Schaffhausen", "Jaeger-LeCoultre", "Montblanc", "Panerai", "Piaget", "Purdey", "Roger Dubuis", "Vacheron Constantin")) { BrandItem(it) }
+        items(listOf("A. Lange & Söhne", "Baume & Mercier", "Cartier", "IWC Schaffhausen", "Jaeger-LeCoultre", "Montblanc", "Panerai", "Piaget", "Purdey", "Roger Dubuis", "Vacheron Constantin")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Festina Group") }
-        items(listOf("Calypso", "Candino", "Festina", "Jaguar", "Khronos", "L.Leroy", "Lotus", "Perrelet")) { BrandItem(it) }
+        items(listOf("Calypso", "Candino", "Festina", "Jaguar", "Khronos", "L.Leroy", "Lotus", "Perrelet")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Fossil Group Inc") }
-        items(listOf("Armani Exchange", "Diesel", "DKNY", "Emporio Armani", "Fossil", "Kate Spade New York", "Michael Kors", "Michele", "Relic", "Skagen", "Zodiac")) { BrandItem(it) }
+        items(listOf("Armani Exchange", "Diesel", "DKNY", "Emporio Armani", "Fossil", "Kate Spade New York", "Michael Kors", "Michele", "Relic", "Skagen", "Zodiac")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Franck Muller Group") }
-        items(listOf("Backes & Strauss", "European Company Watch", "Franck Muller")) { BrandItem(it) }
+        items(listOf("Backes & Strauss", "European Company Watch", "Franck Muller")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Ice Holding Group") }
-        items(listOf("Ice-Watch", "Watchpeople")) { BrandItem(it) }
+        items(listOf("Ice-Watch", "Watchpeople")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Invicta Watch Group") }
-        items(listOf("Glycine", "Invicta", "S. Coifman", "TechnoMarine")) { BrandItem(it) }
+        items(listOf("Glycine", "Invicta", "S. Coifman", "TechnoMarine")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("KDDL Group") }
-        items(listOf("Favre-Leuba")) { BrandItem(it) }
+        items(listOf("Favre-Leuba")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("LVMH") }
-        items(listOf("Bulgari", "Chaumet", "Gerald Genta", "Hublot", "L'Epée 1839", "TAG Heuer", "Tiffany & Co.", "Zenith")) { BrandItem(it) }
+        items(listOf("Bulgari", "Chaumet", "Gerald Genta", "Hublot", "L'Epée 1839", "TAG Heuer", "Tiffany & Co.", "Zenith")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Mondaine Group") }
-        items(listOf("Luminox", "M-Watch", "Mondaine", "Pierre Cardin")) { BrandItem(it) }
+        items(listOf("Luminox", "M-Watch", "Mondaine", "Pierre Cardin")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Movado Group") }
-        items(listOf("Coach", "Concord", "Ebel", "HUGO BOSS", "Lacoste", "MVMT", "Movado", "Olivia Burton", "Rebecca Minkoff", "Tommy Hilfiger")) { BrandItem(it) }
+        items(listOf("Coach", "Concord", "Ebel", "HUGO BOSS", "Lacoste", "MVMT", "Movado", "Olivia Burton", "Rebecca Minkoff", "Tommy Hilfiger")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Partners Group") }
-        items(listOf("Breitling", "Universal Genève")) { BrandItem(it) }
+        items(listOf("Breitling", "Universal Genève")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Pierre Lannier Group") }
-        items(listOf("1977", "Pierre Lannier")) { BrandItem(it) }
+        items(listOf("1977", "Pierre Lannier")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Point Tec") }
-        items(listOf("Bauhaus", "Iron Annie", "Junkers", "Zeppelin")) { BrandItem(it) }
+        items(listOf("Bauhaus", "Iron Annie", "Junkers", "Zeppelin")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Riba Watch Group") }
-        items(listOf("GEOVANI", "Murex", "Optima")) { BrandItem(it) }
+        items(listOf("GEOVANI", "Murex", "Optima")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Rolex SA") }
-        items(listOf("Rolex", "Tudor")) { BrandItem(it) }
+        items(listOf("Rolex", "Tudor")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Seiko Group Corporation") }
-        items(listOf("Credor", "Grand Seiko", "Seiko")) { BrandItem(it) }
+        items(listOf("Credor", "Grand Seiko", "Seiko")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Swatch Group Ltd") }
-        items(listOf("Balmain", "Blancpain", "Breguet", "Calvin Klein", "Certina", "Flik Flak", "Glashütte Original", "Hamilton", "Harry Winston", "Longines", "Mido", "Omega", "Rado", "Swatch", "Tissot", "Union Glashütte")) { BrandItem(it) }
+        items(listOf("Balmain", "Blancpain", "Breguet", "Calvin Klein", "Certina", "Flik Flak", "Glashütte Original", "Hamilton", "Harry Winston", "Longines", "Mido", "Omega", "Rado", "Swatch", "Tissot", "Union Glashütte")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Timex Group") }
-        items(listOf("Adidas", "Furla", "Gc", "Guess", "Missoni", "Nautica", "Philipp Plein", "Plein Sport", "Salvatore Ferragamo", "Ted Baker", "Timex", "Versace")) { BrandItem(it) }
+        items(listOf("Adidas", "Furla", "Gc", "Guess", "Missoni", "Nautica", "Philipp Plein", "Plein Sport", "Salvatore Ferragamo", "Ted Baker", "Timex", "Versace")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Timeway Group") }
-        items(listOf("Clyda", "Maison Montignac", "Orlam")) { BrandItem(it) }
+        items(listOf("Clyda", "Maison Montignac", "Orlam")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Independent Watch Companies") }
-        items(listOf("22Studio", "ABP Concept", "Adriatica", "Agelocer", "Airain", "Alexandra Schmitz Art de l'Anglage", "Alto Watches", "Anne Klein", "anOrdain", "Appella", "Arcanaut", "Atlantic", "Auricoste", "Awake", "BA111od", "Beauregard", "Behrens", "Berney", "Bianchet", "Blackout Concept", "B.R.M Chronographes", "Charlie Paris", "CIGA Design", "Claude Meylan", "Cronus Art", "Daniel Wellington", "David Van Heim", "Depancel", "De Rijke & Co", "Dominique Renaud", "Dwiss", "Electra", "Elgé", "Emera", "Eska", "Favre-Bullé", "Felipe Pikullik", "Flux Watches", "Furlan Marri", "Gambrell & Renard", "GoS", "Graham", "Gruppo Gamma", "Haute-Rive", "ID Genève", "Jowissa", "Kelton", "Kerbedanz", "Krayon", "Le Forban Sécurité Mer", "Lobner", "Lorige", "Louis Erard", "Magellan", "Maison Boanton", "Marvin", "Maserati", "Mathey-Tissot", "MB&F", "MHP Horlogerie", "Milus", "Montres Etoile", "Nepro", "Nomadic", "Oisa 1937", "Ollech Wajs", "Pilo & Co Genève", "Poiray Paris", "Porsche Design", "Qian Guobiao", "Raidillon", "Ralf Tech", "Redwood", "Richelieu", "RMS Zeitmeister", "Rodania", "Romago", "RSW", "Saint-Honoré Paris", "Sandoz", "Sinclair Harding", "Squale", "Swiss Military Hanowa", "Titoni", "Utinam", "Von Doren", "Vostok Europe", "Wenger", "White Star Watch", "Wise", "Zannetti")) { BrandItem(it) }
+        items(listOf("22Studio", "ABP Concept", "Adriatica", "Agelocer", "Airain", "Alexandra Schmitz Art de l'Anglage", "Alto Watches", "Anne Klein", "anOrdain", "Appella", "Arcanaut", "Atlantic", "Auricoste", "Awake", "BA111od", "Beauregard", "Behrens", "Berney", "Bianchet", "Blackout Concept", "B.R.M Chronographes", "Charlie Paris", "CIGA Design", "Claude Meylan", "Cronus Art", "Daniel Wellington", "David Van Heim", "Depancel", "De Rijke & Co", "Dominique Renaud", "Dwiss", "Electra", "Elgé", "Emera", "Eska", "Favre-Bullé", "Felipe Pikullik", "Flux Watches", "Furlan Marri", "Gambrell & Renard", "GoS", "Graham", "Gruppo Gamma", "Haute-Rive", "ID Genève", "Jowissa", "Kelton", "Kerbedanz", "Krayon", "Le Forban Sécurité Mer", "Lobner", "Lorige", "Louis Erard", "Magellan", "Maison Boanton", "Marvin", "Maserati", "Mathey-Tissot", "MB&F", "MHP Horlogerie", "Milus", "Montres Etoile", "Nepro", "Nomadic", "Oisa 1937", "Ollech Wajs", "Pilo & Co Genève", "Poiray Paris", "Porsche Design", "Qian Guobiao", "Raidillon", "Ralf Tech", "Redwood", "Richelieu", "RMS Zeitmeister", "Rodania", "Romago", "RSW", "Saint-Honoré Paris", "Sandoz", "Sinclair Harding", "Squale", "Swiss Military Hanowa", "Titoni", "Utinam", "Von Doren", "Vostok Europe", "Wenger", "White Star Watch", "Wise", "Zannetti")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Microbrands") }
-        items(listOf("5280 Watch Co", "Abordage", "Áigi", "Akrone", "Alanti", "AL-Time", "Aposé", "Ares", "Arilus", "Arken", "Atelier Jalaper", "Atelier Nossedh", "Atelier Wen", "Avi-8", "Baltic", "Beaubleu", "Beaucroft", "Bohen", "Bouveret", "Brew Watch Co.", "Bruno Söhnle", "Buci", "Bvor", "Carlingue", "Champs-Élysées", "Clemence", "Compass", "D1 Milano", "Danubius", "Direnzo", "DONE", "Dufrane", "Echo Neutra", "Epos", "Escudo", "Fathers", "Gavox", "Geylang Watch Co", "Grandval", "Gustave & Cie", "H992", "Halchimy", "HZ Watches", "KNIS", "La Cité Watches", "Laps", "Maison Alcée", "Max Twelve", "McGonigle", "Meridiano", "Mezei Watch Company", "Nalla Neram", "Northern Star Watch", "Ocean Crawler", "OVD", "Paul Hewitt", "Roamer", "Sartory-Billard", "Schaefer & Companions", "Semper Adhuc", "Shelby", "SOVRYGN", "Springer Fersen", "Stil Timepieces", "Thacker & Merali", "Trauffer", "Unison", "Version", "Wancher", "XRby")) { BrandItem(it) }
+        items(listOf("5280 Watch Co", "Abordage", "Áigi", "Akrone", "Alanti", "AL-Time", "Aposé", "Ares", "Arilus", "Arken", "Atelier Jalaper", "Atelier Nossedh", "Atelier Wen", "Avi-8", "Baltic", "Beaubleu", "Beaucroft", "Bohen", "Bouveret", "Brew Watch Co.", "Bruno Söhnle", "Buci", "Bvor", "Carlingue", "Champs-Élysées", "Clemence", "Compass", "D1 Milano", "Danubius", "Direnzo", "DONE", "Dufrane", "Echo Neutra", "Epos", "Escudo", "Fathers", "Gavox", "Geylang Watch Co", "Grandval", "Gustave & Cie", "H992", "Halchimy", "HZ Watches", "KNIS", "La Cité Watches", "Laps", "Maison Alcée", "Max Twelve", "McGonigle", "Meridiano", "Mezei Watch Company", "Nalla Neram", "Northern Star Watch", "Ocean Crawler", "OVD", "Paul Hewitt", "Roamer", "Sartory-Billard", "Schaefer & Companions", "Semper Adhuc", "Shelby", "SOVRYGN", "Springer Fersen", "Stil Timepieces", "Thacker & Merali", "Trauffer", "Unison", "Version", "Wancher", "XRby")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
 @Composable
-fun CountriesTab() {
+fun CountriesTab(onNavigate: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item { BrandSectionHeader("Australia") }
-        items(listOf("HZ Watches")) { BrandItem(it) }
+        items(listOf("HZ Watches")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Belgium") }
-        items(listOf("Gavox", "Ice-Watch", "Raidillon")) { BrandItem(it) }
+        items(listOf("Gavox", "Ice-Watch", "Raidillon")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Canada") }
-        items(listOf("Alanti", "Beauregard", "La Cité Watches", "Redwood", "Shelby", "SOVRYGN", "Thacker & Merali", "Unison")) { BrandItem(it) }
+        items(listOf("Alanti", "Beauregard", "La Cité Watches", "Redwood", "Shelby", "SOVRYGN", "Thacker & Merali", "Unison")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("China") }
-        items(listOf("Agelocer", "Behrens", "CIGA Design", "Cronus Art", "Qian Guobiao")) { BrandItem(it) }
+        items(listOf("Agelocer", "Behrens", "CIGA Design", "Cronus Art", "Qian Guobiao")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Denmark") }
-        items(listOf("Arcanaut")) { BrandItem(it) }
+        items(listOf("Arcanaut")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("England") }
-        items(listOf("Bvor", "Sinclair Harding")) { BrandItem(it) }
+        items(listOf("Bvor", "Sinclair Harding")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("France") }
-        items(listOf("1977", "Airain", "Akrone", "Alto Watches", "Aposé", "Auricoste", "Awake", "Bohen", "Bouveret", "B.R.M Chronographes", "Buci", "Carlingue", "Charlie Paris", "Clyda", "Depancel", "Elgé", "Eska", "Grandval", "Gustave & Cie", "Halchimy", "Kelton", "Laps", "L.Leroy", "Le Forban Sécurité Mer", "Lorige", "Maison Alcée", "Maison Boanton", "Maison Montignac", "Meridiano", "MHP Horlogerie", "Poiray Paris", "Ralf Tech", "Saint-Honoré Paris", "Sartory-Billard", "Semper Adhuc", "Springer Fersen", "Utinam", "Version", "XRby")) { BrandItem(it) }
+        items(listOf("1977", "Airain", "Akrone", "Alto Watches", "Aposé", "Auricoste", "Awake", "Bohen", "Bouveret", "B.R.M Chronographes", "Buci", "Carlingue", "Charlie Paris", "Clyda", "Depancel", "Elgé", "Eska", "Grandval", "Gustave & Cie", "Halchimy", "Kelton", "Laps", "L.Leroy", "Le Forban Sécurité Mer", "Lorige", "Maison Alcée", "Maison Boanton", "Maison Montignac", "Meridiano", "MHP Horlogerie", "Poiray Paris", "Ralf Tech", "Saint-Honoré Paris", "Sartory-Billard", "Semper Adhuc", "Springer Fersen", "Utinam", "Version", "XRby")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Germany") }
-        items(listOf("Felipe Pikullik", "Lobner", "Paul Hewitt", "Porsche Design", "RMS Zeitmeister", "Union Glashütte")) { BrandItem(it) }
+        items(listOf("Felipe Pikullik", "Lobner", "Paul Hewitt", "Porsche Design", "RMS Zeitmeister", "Union Glashütte")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Greece") }
-        items(listOf("Stil Timepieces")) { BrandItem(it) }
+        items(listOf("Stil Timepieces")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Hong Kong") }
-        items(listOf("Electra", "Link2Care", "OVD")) { BrandItem(it) }
+        items(listOf("Electra", "Link2Care", "OVD")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Ireland") }
-        items(listOf("McGonigle", "Nomadic")) { BrandItem(it) }
+        items(listOf("McGonigle", "Nomadic")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Italy") }
-        items(listOf("D1 Milano", "Echo Neutra", "Fathers", "Maserati", "Oisa 1937", "Zannetti")) { BrandItem(it) }
+        items(listOf("D1 Milano", "Echo Neutra", "Fathers", "Maserati", "Oisa 1937", "Zannetti")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Japan") }
-        items(listOf("Credor", "KNIS", "Wancher")) { BrandItem(it) }
+        items(listOf("Credor", "KNIS", "Wancher")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Lithuania") }
-        items(listOf("Vostok Europe")) { BrandItem(it) }
+        items(listOf("Vostok Europe")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Netherlands") }
-        items(listOf("De Rijke & Co")) { BrandItem(it) }
+        items(listOf("De Rijke & Co")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Norway") }
-        items(listOf("Von Doren")) { BrandItem(it) }
+        items(listOf("Von Doren")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Romania") }
-        items(listOf("Danubius")) { BrandItem(it) }
+        items(listOf("Danubius")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Singapore") }
-        items(listOf("Geylang Watch Co", "Gruppo Gamma")) { BrandItem(it) }
+        items(listOf("Geylang Watch Co", "Gruppo Gamma")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Sweden") }
-        items(listOf("Atelier Nossedh", "Daniel Wellington", "GoS")) { BrandItem(it) }
+        items(listOf("Atelier Nossedh", "Daniel Wellington", "GoS")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Switzerland") }
-        items(listOf("Adriatica", "Alexandra Schmitz Art de l'Anglage", "Appella", "Atlantic", "BA111od", "Berney", "Bianchet", "Blackout Concept", "Champs-Élysées", "Claude Meylan", "David Van Heim", "Direnzo", "Dominique Renaud", "DONE", "Dwiss", "Emera", "Epos", "Favre-Bullé", "Favre-Leuba", "Furlan Marri", "GEOVANI", "Gerald Genta", "Glycine", "Graham", "Haute-Rive", "ID Genève", "Jowissa", "Kerbedanz", "Krayon", "L'Epée 1839", "Louis Erard", "Magellan", "Marvin", "Max Twelve", "Mathey-Tissot", "MB&F", "Milus", "Montres Etoile", "Murex", "Nalla Neram", "Nepro", "Ollech Wajs", "Optima", "Orlam", "Perrelet", "Pilo & Co Genève", "Richelieu", "Roamer", "Rodania", "Romago", "RSW", "Sandoz", "Schaefer & Companions", "Squale", "Swiss Military Hanowa", "Titoni", "Trauffer", "Watchpeople", "Wenger", "White Star Watch")) { BrandItem(it) }
+        items(listOf("Adriatica", "Alexandra Schmitz Art de l'Anglage", "Appella", "Atlantic", "BA111od", "Berney", "Bianchet", "Blackout Concept", "Champs-Élysées", "Claude Meylan", "David Van Heim", "Direnzo", "Dominique Renaud", "DONE", "Dwiss", "Emera", "Epos", "Favre-Bullé", "Favre-Leuba", "Furlan Marri", "GEOVANI", "Gerald Genta", "Glycine", "Graham", "Haute-Rive", "ID Genève", "Jowissa", "Kerbedanz", "Krayon", "L'Epée 1839", "Louis Erard", "Magellan", "Marvin", "Max Twelve", "Mathey-Tissot", "MB&F", "Milus", "Montres Etoile", "Murex", "Nalla Neram", "Nepro", "Ollech Wajs", "Optima", "Orlam", "Perrelet", "Pilo & Co Genève", "Richelieu", "Roamer", "Rodania", "Romago", "RSW", "Sandoz", "Schaefer & Companions", "Squale", "Swiss Military Hanowa", "Titoni", "Trauffer", "Watchpeople", "Wenger", "White Star Watch")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Taiwan") }
-        items(listOf("22Studio")) { BrandItem(it) }
+        items(listOf("22Studio")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Thailand") }
-        items(listOf("Wise")) { BrandItem(it) }
+        items(listOf("Wise")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("United Kingdom") }
-        items(listOf("anOrdain", "Clemence", "Escudo", "Mezei Watch Company")) { BrandItem(it) }
+        items(listOf("anOrdain", "Clemence", "Escudo", "Mezei Watch Company")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("United States of America") }
-        items(listOf("Anne Klein", "Compass", "Dufrane", "Flux Watches", "Gambrell & Renard", "Garmin", "Invicta", "Northern Star Watch", "Ocean Crawler", "S. Coifman", "TechnoMarine")) { BrandItem(it) }
+        items(listOf("Anne Klein", "Compass", "Dufrane", "Flux Watches", "Gambrell & Renard", "Garmin", "Invicta", "Northern Star Watch", "Ocean Crawler", "S. Coifman", "TechnoMarine")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
 @Composable
-fun ConnectedTab() {
+fun ConnectedTab(onNavigate: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item { BrandSectionHeader("Traditional Brands") }
-        items(listOf("Breitling", "Girard-Perregaux", "Hublot", "Ice-Watch", "Louis Vuitton", "Montblanc", "Omega", "Seiko", "TAG Heuer", "Tissot")) { BrandItem(it) }
+        items(listOf("Breitling", "Girard-Perregaux", "Hublot", "Ice-Watch", "Louis Vuitton", "Montblanc", "Omega", "Seiko", "TAG Heuer", "Tissot")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { BrandSectionHeader("Tech Brands") }
-        items(listOf("Apple", "Garmin", "Google", "Link2Care", "Porsche Design", "Samsung", "Withings")) { BrandItem(it) }
+        items(listOf("Apple", "Garmin", "Google", "Link2Care", "Porsche Design", "Samsung", "Withings")) { name -> BrandItem(name) { onNavigate(name) } }
 
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
-@Composable
-fun AlphabeticalTab() {
-    val brands = listOf(
+val allBrands = listOf(
         "(A)LT|SYM", "A. Lange & Söhne", "Abordage Horlogerie", "Abingdon Co.", "Accutron",
         "Adidas", "Adriatica", "Aerowatch", "Agelocer", "Alto Watches", "Apple", "Áigi",
         "Airain", "Akrone", "Alanti", "AL-Time", "Alpina", "Alexander Shorokhoff",
@@ -286,10 +321,12 @@ fun AlphabeticalTab() {
         "Von Doren", "Vostok Europe", "Vulcain", "Wancher", "Watchpeople", "Wenger",
         "White Star Watch", "Wise", "Withings", "XRby", "Yema", "Zannetti", "Zenith",
         "Zeppelin", "Zodiac", "5280 Watch Co."
-    )
+)
 
+@Composable
+fun AlphabeticalTab(onNavigate: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(brands) { BrandItem(it) }
+        items(allBrands) { name -> BrandItem(name) { onNavigate(name) } }
         item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }

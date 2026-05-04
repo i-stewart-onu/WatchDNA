@@ -120,9 +120,18 @@ fun WatchDNAApp() {
     ) { padding ->
         if (currentDetail != null) {
             when (currentDetail) {
-                "Watch Brands" -> WatchBrandsScreen(Modifier.padding(padding))
+                "Watch Brands" -> WatchBrandsScreen({ currentDetail = it }, Modifier.padding(padding))
                 "Groups" -> GroupsScreen(Modifier.padding(padding))
-                "Accessories" -> AccessoriesScreen(Modifier.padding(padding))
+                "Accessories" -> AccessoriesScreen({ currentDetail = it }, Modifier.padding(padding))
+                "Benson" -> BensonScreen(Modifier.padding(padding))
+                "Heisse & Söhne" -> HeisseSohneScreen(Modifier.padding(padding))
+                "Wolf 1834" -> Wolf1834Screen(Modifier.padding(padding))
+                "Legion Safes" -> LegionSafesScreen(Modifier.padding(padding))
+                "JU Straps" -> JUStrapsScreen(Modifier.padding(padding))
+                "LIC-Leather" -> LICLeatherScreen(Modifier.padding(padding))
+                "Maison Alcée" -> MaisonAlceeScreen(Modifier.padding(padding))
+                "Compass" -> CompassScreen(Modifier.padding(padding))
+                "Watch Certificate" -> WatchCertificateScreen(Modifier.padding(padding))
                 "Tradeshows" -> TradeshowsScreen(Modifier.padding(padding))
                 "Committee" -> CommitteeScreen(Modifier.padding(padding))
                 "Platforms" -> PlatformsScreen(Modifier.padding(padding))
@@ -134,10 +143,18 @@ fun WatchDNAApp() {
                 "Watchmaking 101" -> Watchmaking101Screen(Modifier.padding(padding))
                 "World of Watches" -> WorldOfWatchesScreen(Modifier.padding(padding))
                 "Our Stories" -> OurStoriesScreen(Modifier.padding(padding))
+                "Articles" -> CommunityArticlesScreen({ currentDetail = it }, Modifier.padding(padding))
+                "article_vancouver" -> CommunityArticleDetailScreen("article_vancouver", Modifier.padding(padding))
+                "article_wwday_why" -> CommunityArticleDetailScreen("article_wwday_why", Modifier.padding(padding))
+                "article_wwday_launch" -> CommunityArticleDetailScreen("article_wwday_launch", Modifier.padding(padding))
+                "article_leadership" -> CommunityArticleDetailScreen("article_leadership", Modifier.padding(padding))
+                "article_holidays" -> CommunityArticleDetailScreen("article_holidays", Modifier.padding(padding))
+                "article_movember" -> CommunityArticleDetailScreen("article_movember", Modifier.padding(padding))
+                "Aficionados" -> AficionadosScreen(Modifier.padding(padding))
                 "Our Vision" -> OurVisionScreen(Modifier.padding(padding))
                 "1% for the Planet" -> OnePercentPlanetScreen(Modifier.padding(padding))
                 "B1G1 | Business for Good" -> B1G1Screen(Modifier.padding(padding))
-                else -> DetailScreen(currentDetail!!, Modifier.padding(padding))
+                else -> BrandDetailScreen(currentDetail!!, Modifier.padding(padding))
             }
         } else {
             when (currentScreen) {
