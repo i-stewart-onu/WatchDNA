@@ -154,6 +154,13 @@ fun WatchDNAApp() {
                 "Our Vision" -> OurVisionScreen(Modifier.padding(padding))
                 "1% for the Planet" -> OnePercentPlanetScreen(Modifier.padding(padding))
                 "B1G1 | Business for Good" -> B1G1Screen(Modifier.padding(padding))
+                "FAQ's" -> FAQScreen(Modifier.padding(padding))
+                "Useful Links" -> UsefulLinksScreen(Modifier.padding(padding))
+                "Newsletter" -> NewsletterScreen(Modifier.padding(padding))
+                "Contact Us" -> ContactUsScreen(Modifier.padding(padding))
+                "Local Community" -> LocalCommunityScreen(Modifier.padding(padding))
+                "Terms & Conditions" -> TermsConditionsScreen(Modifier.padding(padding))
+                "Return & Refund" -> ReturnRefundScreen(Modifier.padding(padding))
                 else -> BrandDetailScreen(currentDetail!!, Modifier.padding(padding))
             }
         } else {
