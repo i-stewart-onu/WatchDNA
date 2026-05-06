@@ -54,7 +54,11 @@ fun WatchDNAApp() {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(currentDetail ?: "WatchDNA", fontWeight = FontWeight.Bold)
+                    val title = if (currentDetail?.startsWith("aficionado_") == true)
+                        aficionados.find { it.routeKey == currentDetail }?.name ?: currentDetail
+                    else
+                        currentDetail
+                    Text(title ?: "WatchDNA", fontWeight = FontWeight.Bold)
                 },
                 navigationIcon = {
                     if (currentDetail != null) {
@@ -158,7 +162,15 @@ fun WatchDNAApp() {
                 "article_leadership" -> CommunityArticleDetailScreen("article_leadership", Modifier.padding(padding))
                 "article_holidays" -> CommunityArticleDetailScreen("article_holidays", Modifier.padding(padding))
                 "article_movember" -> CommunityArticleDetailScreen("article_movember", Modifier.padding(padding))
-                "Aficionados" -> AficionadosScreen(Modifier.padding(padding))
+                "Aficionados" -> AficionadosScreen({ currentDetail = it }, Modifier.padding(padding))
+                "aficionado_adam_craniotes",
+                "aficionado_serdar_oal",
+                "aficionado_justin_mastine_frost",
+                "aficionado_george_sully",
+                "aficionado_tyler_worden",
+                "aficionado_hakim_el_kadiri",
+                "aficionado_gannon_brousseau",
+                "aficionado_jason_hutton" -> AficionadoDetailScreen(currentDetail!!, Modifier.padding(padding))
                 "Our Vision" -> OurVisionScreen(Modifier.padding(padding))
                 "1% for the Planet" -> OnePercentPlanetScreen(Modifier.padding(padding))
                 "B1G1 | Business for Good" -> B1G1Screen(Modifier.padding(padding))
