@@ -143,6 +143,14 @@ fun WatchDNAApp() {
                 "Watchmaking 101" -> Watchmaking101Screen(Modifier.padding(padding))
                 "World of Watches" -> WorldOfWatchesScreen(Modifier.padding(padding))
                 "Our Stories" -> OurStoriesScreen(Modifier.padding(padding))
+                "Press Releases" -> PressReleasesScreen(Modifier.padding(padding))
+                "Meet Our Contributors" -> ContributorsScreen(Modifier.padding(padding))
+                "Directory" -> MediaDirectoryScreen(Modifier.padding(padding))
+                "Favourite RSS Feed" -> FavouriteRSSFeedScreen(Modifier.padding(padding))
+                "Community Reads" -> CommunityReadsScreen(Modifier.padding(padding))
+                "Timepieces" -> TimepiecesScreen(Modifier.padding(padding))
+                "AD Directory" -> ADDirectoryScreen(Modifier.padding(padding))
+                "Store Locator" -> StoreLocatorScreen(Modifier.padding(padding)) // <-- NEW ROUTE ADDED HERE
                 "Articles" -> CommunityArticlesScreen({ currentDetail = it }, Modifier.padding(padding))
                 "article_vancouver" -> CommunityArticleDetailScreen("article_vancouver", Modifier.padding(padding))
                 "article_wwday_why" -> CommunityArticleDetailScreen("article_wwday_why", Modifier.padding(padding))
@@ -223,29 +231,6 @@ fun DetailScreen(title: String, modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun EducateScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
-        SectionLabel("Directories")
-        NavRow("Watch Brands") { onNavigate("Watch Brands") }
-        NavRow("Groups") { onNavigate("Groups") }
-        NavRow("Accessories") { onNavigate("Accessories") }
-        NavRow("Tradeshows") { onNavigate("Tradeshows") }
-        NavRow("Committee") { onNavigate("Committee") }
-        NavRow("Platforms") { onNavigate("Platforms") }
-
-        SectionLabel("Awards")
-        NavRow("Alexander Awards") { onNavigate("Alexander Awards") }
-        NavRow("Timepiece World Awards") { onNavigate("Timepiece World Awards") }
-        NavRow("Temporis International Awards") { onNavigate("Temporis International Awards") }
-        NavRow("Grand Prix D'Horlogerie de Genève") { onNavigate("Grand Prix D'Horlogerie de Genève") }
-        NavRow("Hong Kong Watch & Clock Design Competition") { onNavigate("Hong Kong Watch & Clock Design Competition") }
-
-        SectionLabel("Education")
-        NavRow("Watchmaking 101") { onNavigate("Watchmaking 101") }
-        NavRow("World of Watches") { onNavigate("World of Watches") }
-    }
-}
 
 @Composable
 fun EntertainScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
