@@ -143,6 +143,12 @@ fun WatchDNAApp() {
                 "Watchmaking 101" -> Watchmaking101Screen(Modifier.padding(padding))
                 "World of Watches" -> WorldOfWatchesScreen(Modifier.padding(padding))
                 "Our Stories" -> OurStoriesScreen(Modifier.padding(padding))
+                "Press Releases" -> PressReleasesScreen(Modifier.padding(padding))
+                "Meet Our Contributors" -> ContributorsScreen(Modifier.padding(padding))
+                "Directory" -> MediaDirectoryScreen(Modifier.padding(padding))
+                "Favourite RSS Feed" -> FavouriteRSSFeedScreen(Modifier.padding(padding))
+                "Community Reads" -> CommunityReadsScreen(Modifier.padding(padding))
+                "Timepieces" -> TimepiecesScreen(Modifier.padding(padding)) // <-- NEW ROUTE ADDED HERE
                 "Articles" -> CommunityArticlesScreen({ currentDetail = it }, Modifier.padding(padding))
                 "article_vancouver" -> CommunityArticleDetailScreen("article_vancouver", Modifier.padding(padding))
                 "article_wwday_why" -> CommunityArticleDetailScreen("article_wwday_why", Modifier.padding(padding))
