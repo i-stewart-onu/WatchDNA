@@ -148,7 +148,9 @@ fun WatchDNAApp() {
                 "Directory" -> MediaDirectoryScreen(Modifier.padding(padding))
                 "Favourite RSS Feed" -> FavouriteRSSFeedScreen(Modifier.padding(padding))
                 "Community Reads" -> CommunityReadsScreen(Modifier.padding(padding))
-                "Timepieces" -> TimepiecesScreen(Modifier.padding(padding)) // <-- NEW ROUTE ADDED HERE
+                "Timepieces" -> TimepiecesScreen(Modifier.padding(padding))
+                "AD Directory" -> ADDirectoryScreen(Modifier.padding(padding))
+                "Store Locator" -> StoreLocatorScreen(Modifier.padding(padding)) // <-- NEW ROUTE ADDED HERE
                 "Articles" -> CommunityArticlesScreen({ currentDetail = it }, Modifier.padding(padding))
                 "article_vancouver" -> CommunityArticleDetailScreen("article_vancouver", Modifier.padding(padding))
                 "article_wwday_why" -> CommunityArticleDetailScreen("article_wwday_why", Modifier.padding(padding))
