@@ -19,8 +19,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.watchdna.ui.theme.WatchDNATheme
 
 class MainActivity : ComponentActivity() {
@@ -54,11 +56,17 @@ fun WatchDNAApp() {
         topBar = {
             TopAppBar(
                 title = {
-                    val title = if (currentDetail?.startsWith("aficionado_") == true)
+                    val titleText = if (currentDetail?.startsWith("aficionado_") == true)
                         aficionados.find { it.routeKey == currentDetail }?.name ?: currentDetail
                     else
                         currentDetail
-                    Text(title ?: "WatchDNA", fontWeight = FontWeight.Bold)
+
+                    Text(
+                        text = titleText ?: "WatchDNA",
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 },
                 navigationIcon = {
                     if (currentDetail != null) {
@@ -70,6 +78,15 @@ fun WatchDNAApp() {
                             )
                         }
                     }
+                },
+                actions = {
+                    AsyncImage(
+                        model = "https://watchdna.com/cdn/shop/files/WatchDNA_Dark_Grey.png",
+                        contentDescription = "WatchDNA Logo",
+                        modifier = Modifier
+                            .height(28.dp)
+                            .padding(end = 12.dp)
+                    )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -154,7 +171,7 @@ fun WatchDNAApp() {
                 "Community Reads" -> CommunityReadsScreen(Modifier.padding(padding))
                 "Timepieces" -> TimepiecesScreen(Modifier.padding(padding))
                 "AD Directory" -> ADDirectoryScreen(Modifier.padding(padding))
-                "Store Locator" -> StoreLocatorScreen(Modifier.padding(padding)) // <-- NEW ROUTE ADDED HERE
+                "Store Locator" -> StoreLocatorScreen(Modifier.padding(padding))
                 "Articles" -> CommunityArticlesScreen({ currentDetail = it }, Modifier.padding(padding))
                 "article_vancouver" -> CommunityArticleDetailScreen("article_vancouver", Modifier.padding(padding))
                 "article_wwday_why" -> CommunityArticleDetailScreen("article_wwday_why", Modifier.padding(padding))
