@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -232,6 +233,40 @@ fun NavRow(label: String, onClick: () -> Unit) {
 }
 
 @Composable
+fun NavCard(label: String, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f)
+            )
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+    }
+}
+
+@Composable
 fun SectionLabel(title: String) {
     Text(
         text = title.uppercase(),
@@ -268,14 +303,14 @@ fun DetailScreen(title: String, modifier: Modifier = Modifier) {
 fun EntertainScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier.verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
         SectionLabel("Articles")
-        NavRow("Our Stories") { onNavigate("Our Stories") }
-        NavRow("Press Releases") { onNavigate("Press Releases") }
-        NavRow("Meet Our Contributors") { onNavigate("Meet Our Contributors") }
+        NavCard("Our Stories") { onNavigate("Our Stories") }
+        NavCard("Press Releases") { onNavigate("Press Releases") }
+        NavCard("Meet Our Contributors") { onNavigate("Meet Our Contributors") }
 
         SectionLabel("Media")
-        NavRow("Directory") { onNavigate("Directory") }
-        NavRow("Favourite RSS Feed") { onNavigate("Favourite RSS Feed") }
-        NavRow("Community Reads") { onNavigate("Community Reads") }
+        NavCard("Directory") { onNavigate("Directory") }
+        NavCard("Favourite RSS Feed") { onNavigate("Favourite RSS Feed") }
+        NavCard("Community Reads") { onNavigate("Community Reads") }
     }
 }
 
@@ -283,12 +318,12 @@ fun EntertainScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier)
 fun ExploreScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier.verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
         SectionLabel("Buyer's Guide")
-        NavRow("Timepieces") { onNavigate("Timepieces") }
-        NavRow("Accessories") { onNavigate("Accessories") }
+        NavCard("Timepieces") { onNavigate("Timepieces") }
+        NavCard("Accessories") { onNavigate("Accessories") }
 
         SectionLabel("Authorized Dealers")
-        NavRow("AD Directory") { onNavigate("AD Directory") }
-        NavRow("Store Locator") { onNavigate("Store Locator") }
+        NavCard("AD Directory") { onNavigate("AD Directory") }
+        NavCard("Store Locator") { onNavigate("Store Locator") }
     }
 }
 
@@ -296,11 +331,11 @@ fun ExploreScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
 fun CommunityScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier.verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
         SectionLabel("Community")
-        NavRow("Articles") { onNavigate("Articles") }
-        NavRow("Aficionados") { onNavigate("Aficionados") }
-        NavRow("Your Daily Routine") { onNavigate("Your Daily Routine") }
-        NavRow("RedBar") { onNavigate("RedBar") }
-        NavRow("World Watch Day") { onNavigate("World Watch Day") }
+        NavCard("Articles") { onNavigate("Articles") }
+        NavCard("Aficionados") { onNavigate("Aficionados") }
+        NavCard("Your Daily Routine") { onNavigate("Your Daily Routine") }
+        NavCard("RedBar") { onNavigate("RedBar") }
+        NavCard("World Watch Day") { onNavigate("World Watch Day") }
     }
 }
 
@@ -308,17 +343,17 @@ fun CommunityScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier)
 fun DNAScreen(onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = modifier.verticalScroll(rememberScrollState()).padding(bottom = 16.dp)) {
         SectionLabel("Our DNA")
-        NavRow("Our Vision") { onNavigate("Our Vision") }
-        NavRow("1% for the Planet") { onNavigate("1% for the Planet") }
-        NavRow("B1G1 | Business for Good") { onNavigate("B1G1 | Business for Good") }
+        NavCard("Our Vision") { onNavigate("Our Vision") }
+        NavCard("1% for the Planet") { onNavigate("1% for the Planet") }
+        NavCard("B1G1 | Business for Good") { onNavigate("B1G1 | Business for Good") }
 
         SectionLabel("Support & Legal")
-        NavRow("FAQ's") { onNavigate("FAQ's") }
-        NavRow("Useful Links") { onNavigate("Useful Links") }
-        NavRow("Newsletter") { onNavigate("Newsletter") }
-        NavRow("Contact Us") { onNavigate("Contact Us") }
-        NavRow("Local Community") { onNavigate("Local Community") }
-        NavRow("Terms & Conditions") { onNavigate("Terms & Conditions") }
-        NavRow("Return & Refund") { onNavigate("Return & Refund") }
+        NavCard("FAQ's") { onNavigate("FAQ's") }
+        NavCard("Useful Links") { onNavigate("Useful Links") }
+        NavCard("Newsletter") { onNavigate("Newsletter") }
+        NavCard("Contact Us") { onNavigate("Contact Us") }
+        NavCard("Local Community") { onNavigate("Local Community") }
+        NavCard("Terms & Conditions") { onNavigate("Terms & Conditions") }
+        NavCard("Return & Refund") { onNavigate("Return & Refund") }
     }
 }
