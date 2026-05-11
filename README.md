@@ -1,11 +1,11 @@
 # WatchDNA
 
-Welcome to the **WatchDNA** Android App! WatchDNA is your ultimate companion for the world of watches, curated. This application provides watch enthusiasts with a comprehensive directory of watch brands, authorized dealers, industry news, community stories, and a GPS-enabled store locator.
+Welcome to the WatchDNA Android App! WatchDNA is your ultimate companion for the world of watches, curated. This application provides watch enthusiasts with a comprehensive directory of watch brands, authorized dealers, industry news, community stories, and a GPS-enabled store locator.
 
 ## Features
 
 * **Modern UI/UX:** Built entirely with Jetpack Compose and Material Design 3
-* **Intuitive Navigation:** A persistent bottom navigation bar categorizing the app into five core pillars:
+* **Intuitive Navigation:** A persistent bottom navigation bar categorizing the app into five core sections:
     * **Educate:** Directories, Watchmaking 101, and Industry Awards.
     * **Entertain:** Curated articles, press releases, and media feeds.
     * **Explore:** Buyer's guides, Timepieces, and a GPS-enabled Store Locator.
