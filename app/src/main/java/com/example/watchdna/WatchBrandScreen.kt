@@ -89,7 +89,6 @@ fun BrandItem(name: String, onClick: () -> Unit = {}) {
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 10.dp)
     )
     HorizontalDivider()
